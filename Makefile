@@ -47,7 +47,7 @@ usr/include              := $(DESTDIR)/usr/include/
 
 BINFILES := $(usr/bin)uptime $(usr/bin)tload $(usr/bin)free $(usr/bin)w \
             $(usr/bin)top $(usr/bin)vmstat $(usr/bin)watch $(usr/bin)skill \
-            $(usr/bin)snice $(bin)kill $(sbin)sysctl $(usr/bin)pmap \
+            $(usr/bin)snice $(bin)kill $(sbin)sysctl $(usr/bin)pmap $(usr/bin)pio\
             $(usr/proc/bin)pgrep $(usr/proc/bin)pkill $(usr/bin)slabtop \
             $(usr/proc/bin)pwdx
 
@@ -61,7 +61,7 @@ TARFILES := AUTHORS BUGS NEWS README TODO COPYING COPYING.LIB \
             Makefile procps.lsm procps.spec v t README.top CodingStyle \
             sysctl.conf minimal.c $(notdir $(MANFILES)) dummy.c \
             uptime.c tload.c free.c w.c top.c vmstat.c watch.c skill.c \
-            sysctl.c pgrep.c top.h pmap.c slabtop.c pwdx.c
+            sysctl.c pgrep.c top.h pmap.c pio.c slabtop.c pwdx.c
 
 # Stuff (tests, temporary hacks, etc.) left out of the standard tarball
 # plus the top-level Makefile to make it work stand-alone.
@@ -155,7 +155,7 @@ endif
 
 ############ misc.
 
-# free.c pmap.c sysctl.c uptime.c vmstat.c watch.c pgrep.c skill.c tload.c top.c w.c
+# free.c pmap.c pio.c sysctl.c uptime.c vmstat.c watch.c pgrep.c skill.c tload.c top.c w.c
 # utmp.c oldtop.c tmp-junk.c minimal.c
 
 .SUFFIXES:
@@ -244,6 +244,9 @@ w.o:    w.c
 ############ prog.o --> prog
 
 pmap w uptime tload free sysctl vmstat utmp pgrep skill pwdx: % : %.o $(LIBPROC)
+	$(CC) $(ALL_CFLAGS) $^ $(ALL_LDFLAGS) -o $@
+
+pio w uptime tload free sysctl vmstat utmp pgrep skill pwdx: % : %.o $(LIBPROC)
 	$(CC) $(ALL_CFLAGS) $^ $(ALL_LDFLAGS) -o $@
 
 slabtop top: % : %.o $(LIBPROC)
